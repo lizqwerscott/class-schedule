@@ -15,19 +15,15 @@
   (setf (gethash path *routes*)
         fn))
 
-(defun handle-json (raw-body content-length)
-  (if (string= "application/json"
-               content-type)
-      (let ((body (stream-recive-string raw-body
-                                        content-length)))
-        (if body
-            (let ((data (parse body)))
-              (funcall route-fn
-                       data))
-            `(("msg" . 200)
-              ("result" . "data is null"))))
-      `(("msg" . 404)
-        ("result" . "only handle json data"))))
+(defun handle-json (raw-body content-length route-fn)
+  (let ((body (stream-recive-string raw-body
+                                    content-length)))
+    (if body
+        (let ((data (parse body)))
+          (funcall route-fn
+                   data))
+        `(("msg" . 200)
+          ("result" . "data is null")))))
 
 (defun handler (env)
   (format t "get env:~A~%" env)
@@ -41,11 +37,17 @@
                 content-type
                 raw-body)
         (if route-fn
-            `(200
-              nil
-              (,(to-json-a
-                 (handle-json raw-body
-                              content-length))))
+            (if (string= "application/json"
+                              content-type)
+                `(200
+                  nil
+                  (,(to-json-a
+                     (handle-json raw-body
+                                  content-length
+                                  route-fn))))
+                `(404
+                  nil
+                  (,(format nil "Only support json data."))))
             `(404
               nil
               (,(format nil "The Path not find~%")))))))
