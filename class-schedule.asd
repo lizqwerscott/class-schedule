@@ -2,7 +2,7 @@
   :version "0.1.0"
   :author "Lizqwer scott"
   :license ""
-  :depends-on ("clack" "local-time" "yason" "jonathan" "str")
+  :depends-on ("clack" "local-time" "yason" "jonathan" "str" "s-base64")
   :components ((:module "src"
                 :components
                 ((:file "head")

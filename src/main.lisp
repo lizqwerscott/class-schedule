@@ -87,8 +87,8 @@
                      ("result" . ,(get-week-class-schedule data))))
                   (let ((res (get-week-class-schedule data)))
                     (if res
-                        (join "\n" )
-                        "没课！"))))
+                        (encode-str-base64 (join "\n" res))
+                        (encode-str-base64 "没课！")))))
             `(("msg" . 404)
               ("result" . "not have class schedule"))))))
 
@@ -138,12 +138,12 @@
                         (to-json-a
                          `(("msg" . 200)
                            ("result" . ,now-time-class)))
-                        now-time-class))
+                        (encode-str-base64 now-time-class)))
                   (if jsonp
                       (to-json-a
                          `(("msg" . 200)
                            ("result" . ,res)))
-                      "今天没课呢！")))
+                      (encode-str-base64 "今天没课呢！"))))
             `(("msg" . 404)
               ("result" . "not have class schedule"))))))
 
