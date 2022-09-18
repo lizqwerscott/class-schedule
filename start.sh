@@ -1,3 +1,3 @@
 #!/bin/sh
 
-ccl -l ./start.lisp
+ccl -l /home/lizqwer/quicklisp/local-projects/class-schedule/start.lisp
