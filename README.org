@@ -1,0 +1,18 @@
+* Class-Schedule
+
+** Usage
+#+begin_src lisp
+  (ql:quickload :class-schedule)
+  (class-schedule:start-s)
+#+end_src
+** Installation
+#+begin_src bash
+  git clone https://github.com/lizqwerscott/class-schedule.git
+#+end_src
+** Author
+
++ Lizqwer scott
+
+** Copyright
+
+Copyright (c) 2022 Lizqwer scott
