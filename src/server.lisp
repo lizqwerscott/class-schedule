@@ -22,8 +22,9 @@
         (let ((data (parse body)))
           (funcall route-fn
                    data))
-        `(("msg" . 200)
-          ("result" . "data is null")))))
+        (to-json-a
+         `(("msg" . 200)
+           ("result" . "data is null"))))))
 
 (defun handler (env)
   (format t "get env:~A~%" env)
@@ -41,10 +42,9 @@
                               content-type)
                 `(200
                   nil
-                  (,(to-json-a
-                     (handle-json raw-body
-                                  content-length
-                                  route-fn))))
+                  (,(handle-json raw-body
+                                content-length
+                                route-fn)))
                 `(404
                   nil
                   (,(format nil "Only support json data."))))
