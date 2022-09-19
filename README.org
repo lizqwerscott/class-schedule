@@ -63,6 +63,24 @@ res:
 #+end_src
 or
 88544814fa
+******* 时间戳加密
+url: /timeencrypt
+data:
+#+begin_src json
+  {
+      "pwd": "12138",
+      "jsonp": True
+  }
+#+end_src
+res:
+#+begin_src json
+  {
+      "msg": 200,
+      "result": "d107124ba0c3bb3ead74"
+  }
+#+end_src
+or
+d107124ba0c3bb3ead74
 ** Installation
 #+begin_src bash
   git clone https://github.com/lizqwerscott/class-schedule.git

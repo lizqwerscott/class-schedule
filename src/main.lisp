@@ -89,8 +89,9 @@
                     (if res
                         (encode-str-base64 (join "\n" res))
                         (encode-str-base64 "没课！")))))
-            `(("msg" . 404)
-              ("result" . "not have class schedule"))))))
+            (to-json-a
+             `(("msg" . 404)
+               ("result" . "not have class schedule")))))))
 
 (defun generate-today-time (hour minute)
   (let ((now-time (today)))
@@ -138,8 +139,9 @@
                          `(("msg" . 200)
                            ("result" . ,res)))
                       (encode-str-base64 "今天没课呢！"))))
-            `(("msg" . 404)
-              ("result" . "not have class schedule"))))))
+            (to-json-a
+             `(("msg" . 404)
+               ("result" . "not have class schedule")))))))
 
 (defroute "/rc4encrypt"
     (lambda (x)
@@ -147,6 +149,21 @@
             (passwd (assoc-value x "passwd"))
             (jsonp (assoc-value x "jsonp")))
         (let ((res (rc4-encrypt src passwd)))
+          (if jsonp
+              (to-json-a
+               `(("msg" . 200)
+                 ("result" . ,res)))
+              res)))))
+
+(defroute "/timeencrypt"
+    (lambda (x)
+      (let ((pwd (assoc-value x "pwd"))
+            (jsonp (assoc-value x "jsonp")))
+        (let ((res (rc4-encrypt (format nil
+                                        "~A"
+                                        (timestamp-to-unix
+                                         (now)))
+                                pwd)))
           (if jsonp
               (to-json-a
                `(("msg" . 200)
