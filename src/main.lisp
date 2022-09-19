@@ -159,15 +159,17 @@
     (lambda (x)
       (let ((pwd (assoc-value x "pwd"))
             (jsonp (assoc-value x "jsonp")))
-        (let ((res (rc4-encrypt (format nil
-                                        "~A"
-                                        (timestamp-to-unix
-                                         (now)))
-                                pwd)))
+        (let* ((now-time (format nil
+                                "~A"
+                                (timestamp-to-unix
+                                 (now))))
+               (res (rc4-encrypt now-time
+                                 pwd)))
           (if jsonp
               (to-json-a
                `(("msg" . 200)
-                 ("result" . ,res)))
+                 ("result" . (("res" . ,res)
+                              ("time" . ,now-time)))))
               res)))))
 
 (defun start-s (&optional (port 8089))
