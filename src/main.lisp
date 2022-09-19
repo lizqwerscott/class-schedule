@@ -161,7 +161,7 @@
             (jsonp (assoc-value x "jsonp")))
         (let* ((now-time (format nil
                                 "~A"
-                                (timestamp-to-unix
+                                (time-unix-mill
                                  (now))))
                (res (rc4-encrypt now-time
                                  pwd)))

@@ -1,6 +1,6 @@
 (defpackage :class-schedule.head
   (:import-from :jonathan :to-json)
-  (:use :common-lisp :clack :yason :babel :s-base64)
+  (:use :common-lisp :clack :yason :babel :s-base64 :local-time)
   (:export
    :to-json-a
    :assoc-value
@@ -8,7 +8,8 @@
    :get-data-dir
    :load-json-file
    :encode-str-base64
-   :rc4-encrypt))
+   :rc4-encrypt
+   :time-unix-mill))
 (in-package :class-schedule.head)
 
 (setf yason:*parse-object-as* :alist)
@@ -122,3 +123,7 @@
                                           (elt sbox b))
                                        256)))))))
     output))
+
+(defun time-unix-mill (timestamp)
+  (+ (* 1000 (timestamp-to-unix timestamp))
+     (timestamp-millisecond timestamp)))
