@@ -1,26 +1,26 @@
 
 # Table of Contents
 
-1.  [Class-Schedule](#org358b8a2)
-    1.  [Usage](#org7c1b165)
-        1.  [start server](#org6a15f88)
-        2.  [API](#org07973bc)
-    2.  [Installation](#org7bd2f1c)
-    3.  [Author](#org9e0ee24)
-    4.  [Copyright](#org526b6a2)
+1.  [Class-Schedule](#orgb1c4d55)
+    1.  [Usage](#org40efbfb)
+        1.  [start server](#org7c78df0)
+        2.  [API](#orge2fa02c)
+    2.  [Installation](#org72fd371)
+    3.  [Author](#org5bad9f3)
+    4.  [Copyright](#org1cf8253)
 
 
-<a id="org358b8a2"></a>
+<a id="orgb1c4d55"></a>
 
 # Class-Schedule
 
 
-<a id="org7c1b165"></a>
+<a id="org40efbfb"></a>
 
 ## Usage
 
 
-<a id="org6a15f88"></a>
+<a id="org7c78df0"></a>
 
 ### start server
 
@@ -28,7 +28,7 @@
     (class-schedule:start-s)
 
 
-<a id="org07973bc"></a>
+<a id="orge2fa02c"></a>
 
 ### API
 
@@ -109,28 +109,31 @@
 
         {
             "msg": 200,
-            "result": "d107124ba0c3bb3ead74"
+            "result": {
+                "res":"d107124ba0c2bd35a074",
+                "time":"1663576390"
+            }
         }
 
     or
     d107124ba0c3bb3ead74
 
 
-<a id="org7bd2f1c"></a>
+<a id="org72fd371"></a>
 
 ## Installation
 
     git clone https://github.com/lizqwerscott/class-schedule.git
 
 
-<a id="org9e0ee24"></a>
+<a id="org5bad9f3"></a>
 
 ## Author
 
 -   Lizqwer scott
 
 
-<a id="org526b6a2"></a>
+<a id="org1cf8253"></a>
 
 ## Copyright
 
