@@ -1,10 +1,68 @@
 * Class-Schedule
-
 ** Usage
+***** start server
 #+begin_src lisp
   (ql:quickload :class-schedule)
   (class-schedule:start-s)
 #+end_src
+
+***** API
+如果jsonp为真则返回json数据格式
+******* 今天的课程
+url: /todayclass
+data:
+#+begin_src json
+  {
+      "person": "张三",
+      "jsonp": True
+  }
+#+end_src
+res:
+#+begin_src json
+  {
+      "msg": 200,
+      "result": "balbal"
+  }
+#+end_src
+或者
+balbal
+******* 现在的课程
+url: /nowclass
+data:
+#+begin_src json
+  {
+      "person": "张三",
+      "jsonp": True
+  }
+#+end_src
+res:
+#+begin_src json
+  {
+      "msg": 200,
+      "result": "balbal"
+  }
+#+end_src
+or
+balbal
+******* rc4加密
+url: /rc4encrypt
+data:
+#+begin_src json
+  {
+      "src": "hello",
+      "passwd": "12138",
+      "jsonp": True
+  }
+#+end_src
+res:
+#+begin_src json
+  {
+      "msg": 200,
+      "result": "88544814fa"
+  }
+#+end_src
+or
+88544814fa
 ** Installation
 #+begin_src bash
   git clone https://github.com/lizqwerscott/class-schedule.git
