@@ -1,5 +1,5 @@
 (defpackage class-schedule
-  (:use :cl :class-schedule.head :class-schedule.server :local-time :str)
+  (:use :cl :class-schedule.head :class-schedule.server :local-time :str :ironclad :babel)
   (:export
    :start-s
    :restart-s
@@ -114,12 +114,6 @@
           (car (car schedule-t)))
       "没课了！"))
 
-(defun test ()
-  (now-class (mapcar #'(lambda (x a)
-                         (list x a))
-                     (list "1" "2" "3" "4")
-                     (generate-all-time))))
-
 (defroute "/nowclass"
     (lambda (x)
       (let ((schedule (search-person-class
@@ -130,8 +124,8 @@
                    (res (get-week-class-schedule data)))
               (if res
                   (let ((now-time-class (now-class
-                                         (mapcar #'(lambda (x t)
-                                                     (list x t))
+                                         (mapcar #'(lambda (x a)
+                                                     (list x a))
                                                  res
                                                  (generate-all-time)))))
                     (if jsonp
@@ -146,6 +140,19 @@
                       (encode-str-base64 "今天没课呢！"))))
             `(("msg" . 404)
               ("result" . "not have class schedule"))))))
+
+;; (defparameter +mode+ (make-cipher :arcfour :key (string-to-octets "12138") :mode :stream))
+
+;; (defun test (text)
+;;   (encrypt-message +mode+
+;;                    (string-to-octets text)))
+
+;; (defun rc4-encrypt (src passwd)
+;;   ())
+
+;; (defroute "/rc4encrypt"
+;;     (lambda (x)
+;;       1))
 
 (defun start-s (&optional (port 8089))
   (server-start :address "0.0.0.0" :port port))
