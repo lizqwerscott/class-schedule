@@ -27,13 +27,13 @@
            ("result" . "data is null"))))))
 
 (defun handler (env)
-  (format t "get env:~A~%" env)
+  ;; (format t "get env:~A~%" env)
   (destructuring-bind (&key request-method path-info request-uri query-string headers content-type content-length raw-body &allow-other-keys)
       env
       (let ((route-fn (gethash path-info *routes*)))
-        (format nil "request-method: ~A, path-info:~A, request-uri:~A, query-string: ~A~%"
-                request-method path-info request-uri query-string)
-        (format nil "content-length: ~A, content-type: ~A, raw-body: ~A~%"
+        (format t "request-method: ~A, path-info:~A, request-uri:~A, query-string: ~A~%" request-method path-info request-uri query-string)
+        (format t "headers: ~A~%" headers)
+        (format t "content-length: ~A, content-type: ~A, raw-body: ~A~%"
                 content-length
                 content-type
                 raw-body)
