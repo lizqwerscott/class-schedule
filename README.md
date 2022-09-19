@@ -1,26 +1,26 @@
 
 # Table of Contents
 
-1.  [Class-Schedule](#orgc9b23df)
-    1.  [Usage](#org5542d2f)
-        1.  [start server](#org486dc51)
-        2.  [API](#orga660a2e)
-    2.  [Installation](#org9860b7f)
-    3.  [Author](#orgba860d7)
-    4.  [Copyright](#org0bb860b)
+1.  [Class-Schedule](#org358b8a2)
+    1.  [Usage](#org7c1b165)
+        1.  [start server](#org6a15f88)
+        2.  [API](#org07973bc)
+    2.  [Installation](#org7bd2f1c)
+    3.  [Author](#org9e0ee24)
+    4.  [Copyright](#org526b6a2)
 
 
-<a id="orgc9b23df"></a>
+<a id="org358b8a2"></a>
 
 # Class-Schedule
 
 
-<a id="org5542d2f"></a>
+<a id="org7c1b165"></a>
 
 ## Usage
 
 
-<a id="org486dc51"></a>
+<a id="org6a15f88"></a>
 
 ### start server
 
@@ -28,7 +28,7 @@
     (class-schedule:start-s)
 
 
-<a id="orga660a2e"></a>
+<a id="org07973bc"></a>
 
 ### API
 
@@ -95,22 +95,42 @@
     or
     88544814fa
 
+4.  时间戳加密
 
-<a id="org9860b7f"></a>
+    url: /timeencrypt
+    data:
+
+        {
+            "pwd": "12138",
+            "jsonp": True
+        }
+
+    res:
+
+        {
+            "msg": 200,
+            "result": "d107124ba0c3bb3ead74"
+        }
+
+    or
+    d107124ba0c3bb3ead74
+
+
+<a id="org7bd2f1c"></a>
 
 ## Installation
 
     git clone https://github.com/lizqwerscott/class-schedule.git
 
 
-<a id="orgba860d7"></a>
+<a id="org9e0ee24"></a>
 
 ## Author
 
 -   Lizqwer scott
 
 
-<a id="org0bb860b"></a>
+<a id="org526b6a2"></a>
 
 ## Copyright
 
