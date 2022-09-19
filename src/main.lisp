@@ -155,10 +155,10 @@
 ;;       1))
 
 (defun start-s (&optional (port 8089))
-  (server-start :address "0.0.0.0" :port port))
+  (server-start :address "0.0.0.0" :port port :server :woo))
 
 (defun restart-s (&optional (port 8089))
-  (server-start :address "0.0.0.0" :port port))
+  (server-start :address "0.0.0.0" :port port :server :woo))
 
 (defun stop-s ()
   (server-stop))
