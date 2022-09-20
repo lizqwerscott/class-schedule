@@ -1,14 +1,13 @@
 * Class-Schedule
 ** Usage
-*** start server
+***** start server
 #+begin_src lisp
   (ql:quickload :class-schedule)
   (class-schedule:start-s)
 #+end_src
-
-*** API
+***** API
 如果jsonp为真则返回json数据格式
-***** 今天的课程
+******* 今天的课程
 url: /todayclass
 data:
 #+begin_src json
@@ -26,7 +25,7 @@ res:
 #+end_src
 或者
 balbal
-***** 现在的课程
+******* 现在的课程
 url: /nowclass
 data:
 #+begin_src json
@@ -44,7 +43,7 @@ res:
 #+end_src
 or
 balbal
-***** rc4加密
+******* rc4加密
 url: /rc4encrypt
 data:
 #+begin_src json
@@ -63,7 +62,7 @@ res:
 #+end_src
 or
 88544814fa
-***** 时间戳加密
+******* 时间戳加密
 url: /timeencrypt
 data:
 #+begin_src json
