@@ -148,12 +148,16 @@
       (let ((src (assoc-value x "src"))
             (passwd (assoc-value x "passwd"))
             (jsonp (assoc-value x "jsonp")))
-        (let ((res (rc4-encrypt src passwd)))
-          (if jsonp
-              (to-json-a
-               `(("msg" . 200)
-                 ("result" . ,res)))
-              res)))))
+        (if (and src passwd)
+            (let ((res (rc4-encrypt src passwd)))
+              (if jsonp
+                  (to-json-a
+                   `(("msg" . 200)
+                     ("result" . ,res)))
+                  res))
+            (to-json-a
+             `(("msg" . 401)
+               ("result" . "参数错误")))))))
 
 (defroute "/timeencrypt"
     (lambda (x)
