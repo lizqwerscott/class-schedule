@@ -31,7 +31,7 @@
 (defun probe-week-s ()
   (let ((day-week (truncate
                    (/ (- (timestamp-to-universal
-                          (today))
+                          (now-today))
                          (timestamp-to-universal
                           (encode-timestamp 0 0 0 8 12 9 2022)))
                       (* 3600 24)
@@ -42,7 +42,7 @@
         "signal"
         "double")))
 
-(defun get-week-class-schedule (class-schedule &optional (week (timestamp-day-of-week (today))))
+(defun get-week-class-schedule (class-schedule &optional (week (timestamp-day-of-week (now-today))))
   (when (and (<= week 5)
              (> week 0))
     (mapcar #'(lambda (class i)
@@ -63,7 +63,7 @@
             (elt class-schedule (- week 1))
             (list "第一节" "第二节" "第三节" "第四节"))))
 
-(defun get-class-schedule (person &optional (week (timestamp-day-of-week (today))))
+(defun get-class-schedule (person &optional (week (timestamp-day-of-week (now-today))))
   (get-week-class-schedule (load-class-schedule
                             (search-person-class person))
                            week))
@@ -94,7 +94,7 @@
                ("result" . "not have class schedule")))))))
 
 (defun generate-today-time (hour minute)
-  (let ((now-time (today)))
+  (let ((now-time (now-today)))
     (encode-timestamp 0 0 minute hour
                       (timestamp-day now-time)
                       (timestamp-month now-time)

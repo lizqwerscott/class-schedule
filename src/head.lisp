@@ -9,7 +9,8 @@
    :load-json-file
    :encode-str-base64
    :rc4-encrypt
-   :time-unix-mill))
+   :time-unix-mill
+   :now-today))
 (in-package :class-schedule.head)
 
 (setf yason:*parse-object-as* :alist)
@@ -127,3 +128,10 @@
 (defun time-unix-mill (timestamp)
   (+ (* 1000 (timestamp-to-unix timestamp))
      (timestamp-millisecond timestamp)))
+
+(defun now-today ()
+  (let ((now-time (now)))
+    (encode-timestamp 0 0 0 8
+                      (timestamp-day now-time)
+                      (timestamp-month now-time)
+                      (timestamp-year now-time))))
