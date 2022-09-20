@@ -159,6 +159,13 @@
              `(("msg" . 401)
                ("result" . "参数错误")))))))
 
+(defun test ()
+  (rc4-encrypt "05140852"
+               (format nil
+                       "~A"
+                       (time-unix-mill
+                        (now)))))
+
 (defroute "/timeencrypt"
     (lambda (x)
       (let ((pwd (assoc-value x "pwd"))
@@ -167,8 +174,8 @@
                                 "~A"
                                 (time-unix-mill
                                  (now))))
-               (res (rc4-encrypt now-time
-                                 pwd)))
+               (res (rc4-encrypt pwd
+                                 now-time)))
           (if jsonp
               (to-json-a
                `(("msg" . 200)
