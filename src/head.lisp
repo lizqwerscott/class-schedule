@@ -1,6 +1,8 @@
 (defpackage :class-schedule.head
   (:import-from :jonathan :to-json)
-  (:use :common-lisp :clack :yason :babel :s-base64 :local-time)
+  (:import-from :flexi-streams :octets-to-string)
+  (:import-from :flexi-streams :string-to-octets)
+  (:use :common-lisp :clack :yason :s-base64 :local-time)
   (:export
    :to-json-a
    :assoc-value
@@ -24,7 +26,7 @@
 (defun stream-recive-string (stream length)
   (let ((result (make-array length :element-type '(unsigned-byte 8))))
     (read-sequence result stream)
-    (octets-to-string result :encoding :utf-8)))
+    (octets-to-string result)))
 
 (defun get-source-dir ()
   (asdf:system-source-directory :class-schedule))

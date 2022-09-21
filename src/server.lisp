@@ -1,4 +1,5 @@
 (defpackage :class-schedule.server
+  (:import-from :str :contains?)
   (:use :cl :class-schedule.head :clack :yason)
   (:export
    :server-start
@@ -30,27 +31,27 @@
   ;; (format t "get env:~A~%" env)
   (destructuring-bind (&key request-method path-info request-uri query-string headers content-type content-length raw-body &allow-other-keys)
       env
-      (let ((route-fn (gethash path-info *routes*)))
-        (format t "request-method: ~A, path-info:~A, request-uri:~A, query-string: ~A~%" request-method path-info request-uri query-string)
-        (format t "headers: ~A~%" headers)
-        (format t "content-length: ~A, content-type: ~A, raw-body: ~A~%"
-                content-length
-                content-type
-                raw-body)
-        (if route-fn
-            (if (string= "application/json"
-                              content-type)
-                `(200
-                  nil
-                  (,(handle-json raw-body
-                                content-length
-                                route-fn)))
-                `(404
-                  nil
-                  (,(format nil "Only support json data."))))
-            `(404
-              nil
-              (,(format nil "The Path not find~%")))))))
+    (let ((route-fn (gethash path-info *routes*)))
+      (format t "request-method: ~A, path-info:~A, request-uri:~A, query-string: ~A~%" request-method path-info request-uri query-string)
+      (format t "headers: ~A~%" headers)
+      (format t "content-length: ~A, content-type: ~A, raw-body: ~A~%"
+              content-length
+              content-type
+              raw-body)
+      (if route-fn
+          (if (contains? "application/json"
+                         content-type)
+              `(200
+                nil
+                (,(handle-json raw-body
+                               content-length
+                               route-fn)))
+              `(404
+                nil
+                (,(format nil "Only support json data."))))
+          `(404
+            nil
+            (,(format nil "The Path not find~%")))))))
 
 (defun server-start (&rest args &key server address port &allow-other-keys)
   (declare (ignore server address port))

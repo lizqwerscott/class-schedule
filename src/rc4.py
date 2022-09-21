@@ -32,5 +32,6 @@ def do_encrypt_rc4(src: str, passwd: str) -> str:
     return output
 
 if __name__ == "__main__":
-    x = do_encrypt_rc4("hello", "12138")
+    x = do_encrypt_rc4("12138", "1663679261299")
+
     print(x)

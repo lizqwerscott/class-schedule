@@ -136,8 +136,8 @@
                         (encode-str-base64 now-time-class)))
                   (if jsonp
                       (to-json-a
-                         `(("msg" . 200)
-                           ("result" . ,res)))
+                       `(("msg" . 200)
+                         ("result" . ,res)))
                       (encode-str-base64 "今天没课呢！"))))
             (to-json-a
              `(("msg" . 404)
@@ -160,20 +160,17 @@
                ("result" . "参数错误")))))))
 
 (defun test ()
-  (rc4-encrypt "05140852"
-               (format nil
-                       "~A"
-                       (time-unix-mill
-                        (now)))))
+  (rc4-encrypt "12138"
+               "1663679261299"))
 
 (defroute "/timeencrypt"
     (lambda (x)
       (let ((pwd (assoc-value x "pwd"))
             (jsonp (assoc-value x "jsonp")))
         (let* ((now-time (format nil
-                                "~A"
-                                (time-unix-mill
-                                 (now))))
+                                 "~A"
+                                 (time-unix-mill
+                                  (now))))
                (res (rc4-encrypt pwd
                                  now-time)))
           (if jsonp
