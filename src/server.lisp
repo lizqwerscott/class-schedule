@@ -43,9 +43,13 @@
                          content-type)
               `(200
                 nil
-                (,(handle-json raw-body
-                               content-length
-                               route-fn)))
+                (,(handler-case
+                      (handle-json raw-body
+                                   content-length
+                                   route-fn)
+                    (error (c)
+                      (format t "[ERROR]: ~A~%" c)
+                      (format nil "error ~A" c)))))
               `(404
                 nil
                 (,(format nil "Only support json data."))))
