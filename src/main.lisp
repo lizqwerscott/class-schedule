@@ -68,6 +68,12 @@
                             (search-person-class person))
                            week))
 
+(defun get-tomorrow-class (class-schedule)
+  (get-week-class-schedule class-schedule
+                           (increase-week
+                            (timestamp-day-of-week
+                             (now-today)))))
+
 (defroute "/"
     (lambda (x)
       (declare (ignore x))
@@ -129,11 +135,20 @@
                                                      (list x a))
                                                  res
                                                  (generate-all-time)))))
-                    (if jsonp
-                        (to-json-a
-                         `(("msg" . 200)
-                           ("result" . ,now-time-class)))
-                        (encode-str-base64 now-time-class)))
+                    (if (string= now-time-class
+                                 "没课了！")
+                        (let ((tomorrow-class (get-tomorrow-class data)))
+                          (if jsonp
+                              (to-json-a
+                               `(("msg" . 200)
+                                 ("result" . ,(car tomorrow-class))))
+                              (encode-str-base64 (join "\n"
+                                                       tomorrow-class))))
+                        (if jsonp
+                            (to-json-a
+                             `(("msg" . 200)
+                               ("result" . ,now-time-class)))
+                            (encode-str-base64 now-time-class))))
                   (if jsonp
                       (to-json-a
                        `(("msg" . 200)

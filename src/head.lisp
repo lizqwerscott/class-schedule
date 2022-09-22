@@ -12,7 +12,8 @@
    :encode-str-base64
    :rc4-encrypt
    :time-unix-mill
-   :now-today))
+   :now-today
+   :increase-week))
 (in-package :class-schedule.head)
 
 (setf yason:*parse-object-as* :alist)
@@ -137,3 +138,8 @@
                       (timestamp-day now-time)
                       (timestamp-month now-time)
                       (timestamp-year now-time))))
+
+(defun increase-week (now-week &optional (steep 1))
+  (mod (+ now-week
+          steep)
+       7))
