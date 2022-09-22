@@ -1,7 +1,7 @@
 import requests
 import json
 
-data = {"person": "李志鹏", "jsonp": True}
+data = {"person": "oxygen", "jsonp": True}
 # data = {"pwd": "12138", "jsonp": True}
 # url = "http://127.0.0.1:8089/todayclass"
 # url = "http://127.0.0.1:8089/nowclass"
