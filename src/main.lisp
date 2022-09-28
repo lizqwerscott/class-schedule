@@ -158,6 +158,26 @@
              `(("msg" . 404)
                ("result" . "not have class schedule")))))))
 
+(defroute "/tomorrowclass"
+  #'(lambda (x)
+      (let ((schedule (search-person-class
+                       (assoc-value x "person")))
+            (jsonp (assoc-value x "jsonp")))
+        (if schedule
+            (let* ((data (load-class-schedule schedule))
+                   (res (get-tomorrow-class data)))
+              (if jsonp
+                  (to-json-a
+                       `(("msg" . 200)
+                         ("result" . ,res)))
+                  (if res
+                      (encode-str-base64 (join "\n"
+                                               tomorrow-class))
+                      (encode-str-base64 "今天没课呢！"))))
+            (to-json-a
+             `(("msg" . 404)
+               ("result" . "not have class schedule")))))))
+
 (defroute "/rc4encrypt"
     (lambda (x)
       (let ((src (assoc-value x "src"))
