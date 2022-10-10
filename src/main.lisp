@@ -44,6 +44,13 @@
         "signal"
         "double")))
 
+(defun handle-name (name-str)
+  (let ((res (split "("
+                    name-str)))
+    (list (car res)
+          (car (split ")"
+                      (second res))))))
+
 (defun get-week-class-schedule (class-schedule &optional (week (timestamp-day-of-week (now-today))))
   (when (and (<= week 5)
              (> week 0))
@@ -55,15 +62,19 @@
                           (if (listp data)
                               (let ((first-week (car
                                                  (assoc-value data
-                                                              "weeks"))))
+                                                              "weeks")))
+                                    (name-and-id (handle-name
+                                                  (assoc-value data
+                                                               "name"))))
                                 (format nil "~A ~A ~A ~A"
-                                        (assoc-value data "name")
+                                        (car name-and-id)
                                         (assoc-value first-week "room")
                                         (assoc-value first-week "teacher")
                                         (assoc-value first-week "week")))
                               "没课!"))))
             (elt class-schedule (- week 1))
             (list "第一节" "第二节" "第三节" "第四节"))))
+
 
 (defun get-class-schedule (person &optional (week (timestamp-day-of-week (now-today))))
   (get-week-class-schedule (load-class-schedule
