@@ -61,13 +61,6 @@
                 char))
        0))
 
-;; (map 'array
-;;      #'(lambda (x)
-;;          (+ x 1))
-;;      (make-array 3
-;;                  :element-type '(unsigned-byte 8)
-;;                  :initial-element 0))
-
 (defun range-array (end &key (element-type '(unsigned-byte 8)))
   (let ((res (make-array end :element-type element-type)))
     (dotimes (i end)
