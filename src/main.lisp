@@ -24,11 +24,33 @@
           (car (car class))
           (search-person-class person (cdr class))))))
 
+(defun get-all-class-name ()
+  (mapcar #'(lambda (x)
+              (car x))
+          (assoc-value +person-class+
+                       "class")))
+
 (defun load-class-schedule (class)
   (let ((path (merge-pathnames (format nil "classSchedule/~A.json" class)
                                (get-data-dir))))
     (when (probe-file path)
       (load-json-file path))))
+
+(defparameter +class-schedules+
+  (make-hash-table :test #'equal))
+
+(defun load-all-class-schedule ()
+  (mapcar #'(lambda (class)
+              (setf (gethash class
+                             +class-schedules+)
+                    (load-class-schedule class)))
+          (get-all-class-name)))
+
+(load-all-class-schedule)
+
+(defun get-all-class-schedule (class)
+  (gethash class
+           +class-schedules+))
 
 (defun probe-week-s ()
   (let ((day-week (truncate
@@ -77,7 +99,7 @@
 
 
 (defun get-class-schedule (person &optional (week (timestamp-day-of-week (now-today))))
-  (get-week-class-schedule (load-class-schedule
+  (get-week-class-schedule (get-all-class-schedule
                             (search-person-class person))
                            week))
 
@@ -99,7 +121,7 @@
                        (assoc-value x "person")))
             (jsonp (assoc-value x "jsonp")))
         (if schedule
-            (let ((data (load-class-schedule schedule)))
+            (let ((data (get-all-class-schedule schedule)))
               (if jsonp
                   (to-json-a
                    `(("msg" . 200)
@@ -140,7 +162,7 @@
                        (assoc-value x "person")))
             (jsonp (assoc-value x "jsonp")))
         (if schedule
-            (let* ((data (load-class-schedule schedule))
+            (let* ((data (get-all-class-schedule schedule))
                    (res (get-week-class-schedule data)))
               (if res
                   (let ((now-time-class (now-class
@@ -177,7 +199,7 @@
                        (assoc-value x "person")))
             (jsonp (assoc-value x "jsonp")))
         (if schedule
-            (let* ((data (load-class-schedule schedule))
+            (let* ((data (get-all-class-schedule schedule))
                    (res (get-tomorrow-class data)))
               (if jsonp
                   (to-json-a
