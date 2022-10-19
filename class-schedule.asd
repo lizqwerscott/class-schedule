@@ -7,6 +7,7 @@
                 :components
                 ((:file "head")
                  (:file "server")
+                 (:file "schedule")
                  (:file "main"))))
   :description ""
   :in-order-to ((test-op (test-op "class-schedule/tests"))))

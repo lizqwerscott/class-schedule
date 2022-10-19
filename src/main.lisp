@@ -1,119 +1,31 @@
 (defpackage class-schedule
-  (:use :cl :class-schedule.head :class-schedule.server :local-time :str :babel)
+  (:use :cl :class-schedule.head :class-schedule.server :class-schedule.schedule :local-time :str :babel)
   (:export
    :start-s
    :restart-s
    :stop-s))
 (in-package :class-schedule)
 
-(defun load-class-person (path)
-  (load-json-file path))
+(defun generate-json (data &optional (is-ok 200))
+  (to-json-a
+   `(("msg" . ,(if is-ok
+                   200
+                   400))
+     ("result" . ,data))))
 
-(defparameter +person-class+
-  (load-class-person
-   (merge-pathnames "class.json"
-                    (get-data-dir))))
-
-(defun search-person-class (person &optional (class (assoc-value +person-class+ "class")))
-  (when class
-    (let ((res (find person
-                     (assoc-value (cdr (car class))
-                                  "person")
-                     :test #'string=)))
-      (if res
-          (car (car class))
-          (search-person-class person (cdr class))))))
-
-(defun get-all-class-name ()
-  (mapcar #'(lambda (x)
-              (car x))
-          (assoc-value +person-class+
-                       "class")))
-
-(defun load-class-schedule (class)
-  (let ((path (merge-pathnames (format nil "classSchedule/~A.json" class)
-                               (get-data-dir))))
-    (when (probe-file path)
-      (load-json-file path))))
-
-(defparameter +class-schedules+
-  (make-hash-table :test #'equal))
-
-(defun load-all-class-schedule ()
-  (mapcar #'(lambda (class)
-              (setf (gethash class
-                             +class-schedules+)
-                    (load-class-schedule class)))
-          (get-all-class-name)))
-
-(load-all-class-schedule)
-
-(defun get-all-class-schedule (class)
-  (gethash class
-           +class-schedules+))
-
-(defun probe-week-s ()
-  (let ((day-week (truncate
-                   (/ (- (timestamp-to-universal
-                          (now-today))
-                         (timestamp-to-universal
-                          (encode-timestamp 0 0 0 8 12 9 2022)))
-                      (* 3600 24)
-                      7))))
-    (if (= 0
-           (mod day-week
-                2))
-        "signal"
-        "double")))
-
-(defun handle-name (name-str)
-  (let ((res (split "("
-                    name-str)))
-    (list (car res)
-          (car (split ")"
-                      (second res))))))
-
-(defun get-week-class-schedule (class-schedule &optional (week (timestamp-day-of-week (now-today))))
-  (when (and (<= week 5)
-             (> week 0))
-    (mapcar #'(lambda (class i)
-                (let ((data (assoc-value class
-                                         (probe-week-s))))
-                  (format nil "~A ~A"
-                          i
-                          (if (listp data)
-                              (let ((first-week (car
-                                                 (assoc-value data
-                                                              "weeks")))
-                                    (name-and-id (handle-name
-                                                  (assoc-value data
-                                                               "name"))))
-                                (format nil "~A ~A ~A ~A"
-                                        (car name-and-id)
-                                        (assoc-value first-week "room")
-                                        (assoc-value first-week "teacher")
-                                        (assoc-value first-week "week")))
-                              "没课!"))))
-            (elt class-schedule (- week 1))
-            (list "第一节" "第二节" "第三节" "第四节"))))
-
-
-(defun get-class-schedule (person &optional (week (timestamp-day-of-week (now-today))))
-  (get-week-class-schedule (get-all-class-schedule
-                            (search-person-class person))
-                           week))
-
-(defun get-tomorrow-class (class-schedule)
-  (get-week-class-schedule class-schedule
-                           (increase-week
-                            (timestamp-day-of-week
-                             (now-today)))))
+(defun return-json-or-txt (data jsonp &optional (data-nil "没课!"))
+  (if jsonp
+      (generate-json data)
+      (encode-str-base64
+       (if data
+           (join "\n"
+                 data)
+           data-nil))))
 
 (defroute "/"
     (lambda (x)
       (declare (ignore x))
-      `(("msg" . 200)
-        ("result" . "Hello"))))
+      (generate-json "Hello")))
 
 (defroute "/todayclass"
     (lambda (x)
@@ -122,39 +34,10 @@
             (jsonp (assoc-value x "jsonp")))
         (if schedule
             (let ((data (get-all-class-schedule schedule)))
-              (if jsonp
-                  (to-json-a
-                   `(("msg" . 200)
-                     ("result" . ,(get-week-class-schedule data))))
-                  (let ((res (get-week-class-schedule data)))
-                    (if res
-                        (encode-str-base64 (join "\n" res))
-                        (encode-str-base64 "没课！")))))
-            (to-json-a
-             `(("msg" . 404)
-               ("result" . "not have class schedule")))))))
-
-(defun generate-today-time (hour minute)
-  (let ((now-time (now-today)))
-    (encode-timestamp 0 0 minute hour
-                      (timestamp-day now-time)
-                      (timestamp-month now-time)
-                      (timestamp-year now-time))))
-
-(defun generate-all-time ()
-  (list (generate-today-time 8 10)
-        (generate-today-time 10 20)
-        (generate-today-time 14 0)
-        (generate-today-time 16 0)))
-
-(defun now-class (schedule-t)
-  (if schedule-t
-      (if (timestamp> (now)
-                      (second
-                       (car schedule-t)))
-          (now-class (cdr schedule-t))
-          (car (car schedule-t)))
-      "没课了！"))
+              (return-json-or-txt (get-week-class-schedule data)
+                                  jsonp))
+            (generate-json "not have class schedule"
+                           nil)))))
 
 (defroute "/nowclass"
     (lambda (x)
@@ -173,25 +56,16 @@
                     (if (string= now-time-class
                                  "没课了！")
                         (let ((tomorrow-class (get-tomorrow-class data)))
-                          (if jsonp
-                              (to-json-a
-                               `(("msg" . 200)
-                                 ("result" . ,(car tomorrow-class))))
-                              (encode-str-base64 (join "\n"
-                                                       tomorrow-class))))
-                        (if jsonp
-                            (to-json-a
-                             `(("msg" . 200)
-                               ("result" . ,now-time-class)))
-                            (encode-str-base64 now-time-class))))
-                  (if jsonp
-                      (to-json-a
-                       `(("msg" . 200)
-                         ("result" . ,res)))
-                      (encode-str-base64 "今天没课呢！"))))
-            (to-json-a
-             `(("msg" . 404)
-               ("result" . "not have class schedule")))))))
+                          (return-json-or-txt (car tomorrow-class)
+                                              jsonp
+                                              "明天第一节没课!"))
+                        (return-json-or-txt now-time-class
+                                            jsonp)))
+                  (return-json-or-txt res
+                                      jsonp
+                                      "今天没课呢！")))
+            (generate-json "not have class schedule"
+                           nil)))))
 
 (defroute "/tomorrowclass"
   #'(lambda (x)
@@ -201,17 +75,11 @@
         (if schedule
             (let* ((data (get-all-class-schedule schedule))
                    (res (get-tomorrow-class data)))
-              (if jsonp
-                  (to-json-a
-                       `(("msg" . 200)
-                         ("result" . ,res)))
-                  (if res
-                      (encode-str-base64 (join "\n"
-                                               tomorrow-class))
-                      (encode-str-base64 "今天没课呢！"))))
-            (to-json-a
-             `(("msg" . 404)
-               ("result" . "not have class schedule")))))))
+              (return-json-or-txt res
+                                  jsonp
+                                  "明天没课呢!"))
+            (generate-json "not have class schedule"
+                           nil)))))
 
 (defroute "/rc4encrypt"
     (lambda (x)
@@ -221,13 +89,10 @@
         (if (and src passwd)
             (let ((res (rc4-encrypt src passwd)))
               (if jsonp
-                  (to-json-a
-                   `(("msg" . 200)
-                     ("result" . ,res)))
+                  (generate-json res)
                   res))
-            (to-json-a
-             `(("msg" . 401)
-               ("result" . "参数错误")))))))
+            (generate-json "参数错误"
+                           nil)))))
 
 (defun test ()
   (rc4-encrypt "12138"

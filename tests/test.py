@@ -16,22 +16,6 @@ class getTask(threading.Thread):
         print("请求结束")
 
 
-# data = {"person": "oxygen", "jsonp": True}
-# data = {"pwd": "12138", "jsonp": True}
-# url = "http://127.0.0.1:8089/todayclass"
-# url = "http://127.0.0.1:8089/nowclass"
-# url = "http://127.0.0.1:8089/tomorrowclass"
-# url = "http://8.219.190.193:8089/nowclass"
-# url = "http://8.219.190.193:8089/todayclass"
-# url = "http://8.219.190.193:8089/tomorrowclass"
-# url = "http://127.0.0.1:8089/rc4encrypt"
-# url = "http://127.0.0.1:8089/timeencrypt"
-# url = "http://8.219.190.193:8089/timeencrypt"
-# url = "http://hk.2002514.xyz:8089/nowclass"
-
-# for i in range(100):
-#     res = requests.post(url, json=data)
-#     print(res.text)
 
 def test_thread():
     id = 0
@@ -45,10 +29,30 @@ def test_thread():
         t.join()
     print("结束")
 
-
-if __name__ == "__main__":
+def test_remote(path: str, remote_addr = "hk.2002514.xyz"):
     data = {"person": "lizqwer", "jsonp": True}
-    url = "http://127.0.0.1:8089/todayclass"
+    url = "http://{}:8089/{}".format(remote_addr, path)
 
     res = requests.post(url, json=data)
     print(res.text)
+
+
+def test(path: str):
+    data = {"person": "lizqwer", "jsonp": True}
+    url = "http://127.0.0.1:8089/" + path
+
+    res = requests.post(url, json=data)
+    return res.text
+
+# url = "http://127.0.0.1:8089/rc4encrypt"
+# url = "http://127.0.0.1:8089/timeencrypt"
+# url = "http://8.219.190.193:8089/timeencrypt"
+
+def test_all():
+    all_paths = ["todayclass", "nowclass", "tomorrowclass"]
+    for path in all_paths:
+        res = test(path)
+        print("{}: {}".format(path, res))
+
+if __name__ == "__main__":
+    test_all()
