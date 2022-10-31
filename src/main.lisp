@@ -18,8 +18,7 @@
       (generate-json data)
       (encode-str-base64
        (if data
-           (join "\n"
-                 data)
+           data
            data-nil))))
 
 (defroute "/"

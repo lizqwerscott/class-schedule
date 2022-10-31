@@ -38,7 +38,7 @@ def test_remote(path: str, remote_addr = "hk.2002514.xyz"):
 
 
 def test(path: str):
-    data = {"person": "lizqwer", "jsonp": True}
+    data = {"person": "lizqwer", "jsonp": False}
     url = "http://127.0.0.1:8089/" + path
 
     res = requests.post(url, json=data)
