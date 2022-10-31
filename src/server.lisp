@@ -1,6 +1,6 @@
 (defpackage :class-schedule.server
   (:import-from :str :contains?)
-  (:use :cl :class-schedule.head :clack :yason)
+  (:use :cl :class-schedule.head :clack :yason :log4cl)
   (:export
    :server-start
    :server-stop
@@ -32,12 +32,7 @@
   (destructuring-bind (&key request-method path-info request-uri query-string headers content-type content-length raw-body &allow-other-keys)
       env
     (let ((route-fn (gethash path-info *routes*)))
-      (format t "request-method: ~A, path-info:~A, request-uri:~A, query-string: ~A~%" request-method path-info request-uri query-string)
-      (format t "headers: ~A~%" headers)
-      (format t "content-length: ~A, content-type: ~A, raw-body: ~A~%"
-              content-length
-              content-type
-              raw-body)
+      (log-info path-info)
       (if route-fn
           (if (contains? "application/json"
                          content-type)
