@@ -16,10 +16,9 @@
 (defun return-json-or-txt (data jsonp &optional (data-nil "没课!"))
   (if jsonp
       (generate-json data)
-      (encode-str-base64
-       (if data
+      (if data
            data
-           data-nil))))
+           data-nil)))
 
 (defroute "/"
     (lambda (x)
