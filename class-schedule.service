@@ -1,0 +1,12 @@
+[Unit]
+Description=This is class schedule.
+
+[Service]
+User=lizqwer
+WorkingDirectory=/home/lizqwer/service-project/class-s/
+ExecStart=/usr/bin/sbcl --disable-debugger --load /home/lizqwer/quicklisp/local-projects/class-schedule/start.lisp
+Type=simple
+Restart=on-failure
+
+[Install]
+WantedBy=netowrk.target
