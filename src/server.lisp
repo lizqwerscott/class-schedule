@@ -1,6 +1,6 @@
 (defpackage :class-schedule.server
   (:import-from :str :contains?)
-  (:use :cl :class-schedule.head :clack :yason :log4cl)
+  (:use :cl :class-schedule.head :clack :yason :log4cl :lzputils.json)
   (:export
    :server-start
    :server-stop

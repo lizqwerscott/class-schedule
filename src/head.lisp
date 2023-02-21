@@ -1,28 +1,16 @@
 (defpackage :class-schedule.head
-  (:import-from :jonathan :to-json)
   (:import-from :flexi-streams :octets-to-string)
   (:import-from :flexi-streams :string-to-octets)
-  (:use :common-lisp :clack :yason :s-base64 :local-time)
+  (:use :common-lisp :clack :s-base64 :local-time)
   (:export
-   :to-json-a
-   :assoc-value
    :stream-recive-string
    :get-data-dir
-   :load-json-file
    :encode-str-base64
    :rc4-encrypt
    :time-unix-mill
    :now-today
    :increase-week))
 (in-package :class-schedule.head)
-
-(setf yason:*parse-object-as* :alist)
-
-(defun to-json-a (alist)
-  (to-json alist :from :alist))
-
-(defun assoc-value (plist key)
-  (cdr (assoc key plist :test #'string=)))
 
 (defun stream-recive-string (stream length)
   (let ((result (make-array length :element-type '(unsigned-byte 8))))
@@ -35,12 +23,6 @@
 (defun get-data-dir ()
   (merge-pathnames "datas/"
                    (get-source-dir)))
-
-(defun load-json-file (path)
-  (with-open-file (in path :direction :input :if-does-not-exist :error)
-    (multiple-value-bind (s) (make-string (file-length in))
-      (read-sequence s in)
-      (parse s))))
 
 (defun encode-str-base64 (str)
   (with-output-to-string (out)

@@ -1,5 +1,5 @@
 (defpackage :class-schedule.schedule
-  (:use :common-lisp :class-schedule.head :local-time :str)
+  (:use :common-lisp :class-schedule.head :local-time :str :lzputils.json)
   (:export
    :search-person-class
    :get-all-class-schedule

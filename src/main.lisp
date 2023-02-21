@@ -1,5 +1,5 @@
 (defpackage class-schedule
-  (:use :cl :class-schedule.head :class-schedule.server :class-schedule.schedule :local-time :str :babel)
+  (:use :cl :class-schedule.head :class-schedule.server :class-schedule.schedule :local-time :str :babel :lzputils.json)
   (:export
    :start-s
    :restart-s
