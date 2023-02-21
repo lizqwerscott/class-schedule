@@ -85,6 +85,11 @@ or
 d107124ba0c3bb3ead74
 ** Installation
 #+begin_src bash
+  git clone git@github.com:lizqwerscott/lzputils.git
+  git clone https://github.com/lizqwerscott/lzputils.git
+#+end_src
+#+begin_src bash
+  git clone git@github.com:lizqwerscott/class-schedule.git
   git clone https://github.com/lizqwerscott/class-schedule.git
 #+end_src
 ** Author
