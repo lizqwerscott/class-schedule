@@ -19,6 +19,15 @@
    (merge-pathnames "class.json"
                     (get-data-dir))))
 
+(defun get-start-week ()
+  (apply #'encode-timestamp
+         (append (list 0 0 0 8)
+                 (mapcar #'parse-integer
+                         (reverse
+                          (split "."
+                                 (assoc-value +person-class+
+                                              "week-start")))))))
+
 (defun search-person-class (person &optional (class (assoc-value +person-class+ "class")))
   (when class
     (let ((res (find person
@@ -62,7 +71,7 @@
                    (/ (- (timestamp-to-universal
                           (now-today))
                          (timestamp-to-universal
-                          (encode-timestamp 0 0 0 8 12 9 2022)))
+                          (get-start-week)))
                       (* 3600 24)
                       7))))
     (if (= 0
