@@ -25,7 +25,7 @@
       (declare (ignore x))
       (generate-json "Hello")))
 
-(defroute "/todayclass"
+(defroute "/class/today"
     (lambda (x)
       (let ((schedule (search-person-class
                        (assoc-value x "person")))
@@ -37,7 +37,7 @@
             (generate-json "not have class schedule"
                            nil)))))
 
-(defroute "/nowclass"
+(defroute "/class/next"
     (lambda (x)
       (let ((schedule (search-person-class
                        (assoc-value x "person")))
@@ -65,7 +65,7 @@
             (generate-json "not have class schedule"
                            nil)))))
 
-(defroute "/tomorrowclass"
+(defroute "/class/tomorrow"
   #'(lambda (x)
       (let ((schedule (search-person-class
                        (assoc-value x "person")))
@@ -79,7 +79,7 @@
             (generate-json "not have class schedule"
                            nil)))))
 
-(defroute "/rc4encrypt"
+(defroute "/tool/rc4encrypt"
     (lambda (x)
       (let ((src (assoc-value x "src"))
             (passwd (assoc-value x "passwd"))
@@ -96,7 +96,7 @@
   (rc4-encrypt "12138"
                "1663679261299"))
 
-(defroute "/timeencrypt"
+(defroute "/tool/timeencrypt"
     (lambda (x)
       (let ((pwd (assoc-value x "pwd"))
             (jsonp (assoc-value x "jsonp")))
