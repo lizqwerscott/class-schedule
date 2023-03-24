@@ -32,7 +32,8 @@
   (destructuring-bind (&key request-method path-info request-uri query-string headers content-type content-length raw-body &allow-other-keys)
       env
     (let ((route-fn (gethash path-info *routes*)))
-      (log-info path-info)
+      (log-info env)
+      (log-info path-info request-method)
       (if route-fn
           (if (contains? "application/json"
                          content-type)
