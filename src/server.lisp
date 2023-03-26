@@ -34,7 +34,8 @@
     (let ((route-fn (gethash path-info *routes*)))
       (log-info env)
       (log-info path-info request-method)
-      (if route-fn
+      (if (and content-type
+             route-fn)
           (if (contains? "application/json"
                          content-type)
               `(200
